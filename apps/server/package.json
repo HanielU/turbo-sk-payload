@@ -1,0 +1,59 @@
+{
+  "name": "@apps/server",
+  "version": "0.0.0",
+  "private": true,
+  "main": "src/trpc/router.ts",
+  "license": "MIT",
+  "scripts": {
+    "lint": "prettier --check --ignore-path=../../.prettierignore . && eslint --ignore-path=../../.eslintignore .",
+    "format": "prettier --write --ignore-path=../../.prettierignore .",
+    "dev": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts nodemon",
+    "build:payload": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts payload build",
+    "build:server": "tsc",
+    "build": "pnpm copyfiles && pnpm build:payload && pnpm build:server",
+    "start": "cross-env PAYLOAD_CONFIG_PATH=dist/payload.config.js NODE_ENV=production node dist/server.js",
+    "copyfiles": "copyfiles -u 1 \"src/**/*.{html,css,scss,ttf,woff,woff2,eot,svg,jpg,png}\" dist/",
+    "generate:types": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts payload generate:types && cp ./src/payload-types.ts ../web/src/lib",
+    "generate:graphQLSchema": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts payload generate:graphQLSchema"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.303.0",
+    "@aws-sdk/lib-storage": "^3.303.0",
+    "@payloadcms/plugin-cloud-storage": "^1.0.14",
+    "@payloadcms/plugin-form-builder": "^1.0.13",
+    "@payloadcms/plugin-nested-docs": "^1.0.4",
+    "@payloadcms/plugin-seo": "^1.0.10",
+    "@react-email/components": "0.0.5",
+    "@react-email/render": "^0.0.7",
+    "@trpc/server": "^10.23.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^7.0.3",
+    "node-cron": "^3.0.2",
+    "payload": "^1.6.29",
+    "payload-plugin-lexical": "^0.2.0",
+    "payload-plugin-oauth": "^0.3.1",
+    "react": "^18.2.0",
+    "react-email": "1.9.1",
+    "short-uuid": "^4.2.2",
+    "superjson": "^1.12.3",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/node-cron": "^3.0.7",
+    "@types/react": "^18.0.33",
+    "copyfiles": "^2.4.1",
+    "cross-env": "^7.0.3",
+    "nodemon": "^2.0.22",
+    "process": "^0.11.10",
+    "ts-node": "^10.9.1",
+    "typescript": "4.9.5"
+  },
+  "exports": {
+    ".": "./src/trpc/router.mts",
+    "./*": "./*"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".svelte-kit/**", ".vercel/**"]
+    },
+    "lint": {
+      "outputs": []
+    },
+    "dev": {
+      "cache": false
+    },
+    "start": {
+      "cache": false
+    },
+
+    "web#build": {
+      "env": ["PUBLIC_SERVER_URL"]
+    },
+    "server#build": {
+      "env": [
+        "PORT",
+        "PAYLOAD_SECRET",
+        "COOKIE_DOMAIN",
+        "NODE_ENV",
+        "MONGO_URL",
+        "PAYLOAD_PUBLIC_SERVER_URL",
+        "PAYLOAD_SEED",
+        "PAYLOAD_DROP_DATABASE",
+
+        "S3_REGION",
+        "S3_ACCESS_KEY_ID",
+        "S3_SECRET_ACCESS_KEY",
+        "S3_BUCKET"
+      ]
+    }
+  }
+}

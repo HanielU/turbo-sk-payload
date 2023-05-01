@@ -1,0 +1,3 @@
+# repository root netlify.toml
+[build]
+  base = "apps/web"

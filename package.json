@@ -1,0 +1,24 @@
+{
+  "private": true,
+  "scripts": {
+    "build:no-logs": "turbo run build --output-logs=errors-only",
+    "build": "turbo run build --continue",
+    "build:web": "turbo run build --filter=web",
+    "start": "turbo run start",
+    "start:web": "turbo run start --filter=web",
+    "dev": "turbo run dev --parallel",
+    "dev:web": "turbo run dev --filter=web",
+    "dev:server": "turbo run dev --filter=server",
+    "build:server": "turbo run build --filter=server",
+    "start:server": "turbo run start --filter=server",
+    "lint": "turbo run lint",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "eslint": "^8.36.0",
+    "eslint-config-custom": "workspace:*",
+    "prettier": "^2.8.6",
+    "prettier-plugin-svelte": "^2.10.0",
+    "turbo": "^1.8.5"
+  }
+}
