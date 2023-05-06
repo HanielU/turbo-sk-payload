@@ -30,9 +30,9 @@ This Turborepo has some additional tools already setup for you:
 This project uses [pnpm].
 
 ```sh
-npx degit AmcecHealth/amcechealth.com # download the project
+npx degit HanielU/turbo-sk-payload # download the project
 
-cd amcechealth.com # navigate into the project
+cd turbo-sk-payload # navigate into the project
 
 pnpm install # install dependencies
 ```
