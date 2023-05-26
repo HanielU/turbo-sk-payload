@@ -30,9 +30,9 @@ This Turborepo has some additional tools already setup for you:
 This project uses [pnpm].
 
 ```sh
-npx degit HanielU/turbo-sk-payload # download the project
+npx degit HanielU/turbo-sk-payload my-app # download the project
 
-cd turbo-sk-payload # navigate into the project
+cd my-app # navigate into the project
 
 pnpm install # install dependencies
 ```
