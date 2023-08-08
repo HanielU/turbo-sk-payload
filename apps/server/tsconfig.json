@@ -6,6 +6,7 @@
     "strict": false,
     "esModuleInterop": true,
     "importsNotUsedAsValues": "error",
+    "ignoreDeprecations": "5.0",
     "skipLibCheck": true,
     "outDir": "./dist",
     "rootDir": "./src",

@@ -15,10 +15,10 @@
     "format": "prettier --write ."
   },
   "devDependencies": {
-    "eslint": "^8.41.0",
+    "eslint": "^8.46.0",
     "eslint-config-custom": "workspace:*",
     "prettier": "^2.8.8",
     "prettier-plugin-svelte": "^2.10.0",
-    "turbo": "^1.9.8"
+    "turbo": "^1.10.12"
   }
 }

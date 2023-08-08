@@ -7,9 +7,6 @@
       "path": "apps/server"
     },
     {
-      "path": "apps/misc"
-    },
-    {
       "path": "."
     }
   ],
