@@ -5,6 +5,8 @@ import { handler as h, variantGetParameter } from "@unocss/preset-mini/utils";
 export const myPreset: Preset = {
   name: "my-preset",
 
+  rules: [["abs", { position: "absolute" }]],
+
   shortcuts: [
     [
       // flex-s stands for flex-shortcut
@@ -17,10 +19,15 @@ export const myPreset: Preset = {
     // use when width and height values are the same
     [/^square-(.*)$/, ([, v]) => `h-${v} w-${v}`, { layer: "utilities" }],
     [
-      /^br(-\w+)?$/, // h - hyphen | v - value
-      ([, hAndV], { theme }) => {
-        const [, v] = hAndV?.split("-") || [];
-        return v ? `rounded-${theme[v] || v}` : "rounded";
+      /^br(-\w+(-\w+)*)?$/, // h - hyphen | v - value
+      ([, hAndV]) => {
+        const [, v1, v2] = hAndV?.split("-") || [];
+        // const vJoined = v.join("-");
+        return v2
+          ? `rounded-${v1 + "-" + v2 || v2}`
+          : v1
+          ? `rounded-${v1}`
+          : "rounded";
       },
       { layer: "default" },
     ],
@@ -40,10 +47,16 @@ export const myPreset: Preset = {
       name: "arbitrary-media-query",
       match(matcher, { theme }) {
         // prefix with @ to specify that it's a media query
-        const minVariant = variantGetParameter("@min-", matcher, [":"]);
-        const maxVariant = variantGetParameter("@max-", matcher, [":"]);
-        const minHeightVariant = variantGetParameter("@min-h-", matcher, [":"]);
-        const maxHeightVariant = variantGetParameter("@max-h-", matcher, [":"]);
+        const minVariant = variantGetParameter("@min-", matcher, [":", "-"]);
+        const maxVariant = variantGetParameter("@max-", matcher, [":", "-"]);
+        const minHeightVariant = variantGetParameter("@min-h-", matcher, [
+          ":",
+          "-",
+        ]);
+        const maxHeightVariant = variantGetParameter("@max-h-", matcher, [
+          ":",
+          "-",
+        ]);
 
         // the order that we check the variants is important
         // because we want to match the most specific one
@@ -158,3 +171,71 @@ export const myPreset: Preset = {
     },
   ],
 };
+
+export function convertPalleteToHSL<
+  T extends Record<string, Record<string, string>>
+>(obj: T) {
+  const temp: Record<string, Record<string, string>> = {};
+  for (const colorKey in obj) {
+    for (const colorShadeKey in obj[colorKey]) {
+      if (!temp[colorKey]) {
+        temp[colorKey] = {
+          [colorShadeKey]: hexToHSL(obj[colorKey][colorShadeKey]),
+        };
+      } else {
+        temp[colorKey][colorShadeKey] = hexToHSL(obj[colorKey][colorShadeKey]);
+      }
+    }
+  }
+  return temp as T;
+}
+
+export function hexToHSL(
+  hex: string,
+  options?: { justNums: boolean; satAndLight?: { s?: number; l?: number } }
+) {
+  const { satAndLight, justNums } = options || {
+    satAndLight: undefined,
+    justNums: false,
+  };
+
+  // convert hex to rgb
+  let r = 0,
+    g = 0,
+    b = 0;
+  if (hex.length === 4) {
+    r = +("0x" + hex[1] + hex[1]);
+    g = +("0x" + hex[2] + hex[2]);
+    b = +("0x" + hex[3] + hex[3]);
+  } else if (hex.length === 7) {
+    r = +("0x" + hex[1] + hex[2]);
+    g = +("0x" + hex[3] + hex[4]);
+    b = +("0x" + hex[5] + hex[6]);
+  }
+
+  // then to HSL
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  const cmin = Math.min(r, g, b);
+  const cmax = Math.max(r, g, b);
+  const delta = cmax - cmin;
+  let h = 0;
+  let s = 0;
+  let l = 0;
+
+  if (delta === 0) h = 0;
+  else if (cmax === r) h = ((g - b) / delta) % 6;
+  else if (cmax === g) h = (b - r) / delta + 2;
+  else h = (r - g) / delta + 4;
+  h = Math.round(h * 60);
+  if (h < 0) h += 360;
+  l = (cmax + cmin) / 2;
+  s = delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+  s = +(s * 100).toFixed(1);
+  l = +(l * 100).toFixed(1);
+
+  if (justNums) return `${h}, ${satAndLight?.s || s}%, ${satAndLight?.l || l}%`;
+
+  return `hsl(${h}, ${satAndLight?.s || s}%, ${satAndLight?.l || l}%)`;
+}

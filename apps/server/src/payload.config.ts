@@ -11,14 +11,20 @@ import whitelist from "./whitelists";
 import { buildConfig } from "payload/config";
 import { cloudStorage } from "@payloadcms/plugin-cloud-storage";
 import { s3Adapter } from "@payloadcms/plugin-cloud-storage/s3";
+import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import { mongooseAdapter } from "@payloadcms/db-mongodb";
+import { viteBundler } from "@payloadcms/bundler-vite";
 
 const dev = process.env.NODE_ENV !== "production";
 const mockModulePath = path.resolve(__dirname, "emptyObject_s.ts");
 
 export default buildConfig({
-  serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
+  db: mongooseAdapter({
+    url: process.env.MONGODB_URI,
+  }),
   admin: {
     user: Users.slug,
+    bundler: viteBundler(),
     webpack: config => ({
       ...config,
       resolve: {
@@ -30,6 +36,7 @@ export default buildConfig({
       },
     }),
   },
+  editor: lexicalEditor(),
   cors: whitelist,
   csrf: whitelist,
   collections: [Categories, Customers, Media, Posts, Tags, Users],

@@ -3,6 +3,7 @@ type Access {
   categories: categoriesAccess
   customers: customersAccess
   media: mediaAccess
+  payload_preferences: payload_preferencesAccess
   posts: postsAccess
   tags: tagsAccess
   users: usersAccess
@@ -122,12 +123,14 @@ type Category {
 }
 
 input Category_id_operator {
-  all: [JSON]
-  equals: JSON
+  all: [String]
+  contains: String
+  equals: String
   exists: Boolean
-  in: [JSON]
-  not_equals: JSON
-  not_in: [JSON]
+  in: [String]
+  like: String
+  not_equals: String
+  not_in: [String]
 }
 
 input Category_name_operator {
@@ -149,11 +152,15 @@ input Category_where {
 }
 
 input Category_where_and {
+  AND: [Category_where_and]
+  OR: [Category_where_or]
   id: Category_id_operator
   name: Category_name_operator
 }
 
 input Category_where_or {
+  AND: [Category_where_and]
+  OR: [Category_where_or]
   id: Category_id_operator
   name: Category_name_operator
 }
@@ -161,11 +168,12 @@ input Category_where_or {
 type Customer {
   _verificationToken: String
   _verified: Boolean
-  createdAt: DateTime!
+  createdAt: DateTime
   dateOfBirth: DateTime
-  email: EmailAddress
+  email: EmailAddress!
   firstName: String!
   gender: [Customer_gender!]
+  hash: String
   id: String
   lastName: String!
   likeCount: Float
@@ -176,7 +184,8 @@ type Customer {
   phoneNumber: String
   resetPasswordExpiration: DateTime
   resetPasswordToken: String
-  updatedAt: DateTime!
+  salt: String
+  updatedAt: DateTime
   viewPost: [Post!]
 }
 
@@ -217,7 +226,6 @@ input Customer_email_operator {
   all: [EmailAddress]
   contains: EmailAddress
   equals: EmailAddress
-  exists: Boolean
   in: [EmailAddress]
   like: EmailAddress
   not_equals: EmailAddress
@@ -259,12 +267,14 @@ input Customer_gender_operator {
 }
 
 input Customer_id_operator {
-  all: [JSON]
-  equals: JSON
+  all: [String]
+  contains: String
+  equals: String
   exists: Boolean
-  in: [JSON]
-  not_equals: JSON
-  not_in: [JSON]
+  in: [String]
+  like: String
+  not_equals: String
+  not_in: [String]
 }
 
 input Customer_lastName_operator {
@@ -288,12 +298,12 @@ input Customer_likeCount_operator {
 }
 
 input Customer_likes_operator {
-  all: [String]
-  equals: String
+  all: [JSON]
+  equals: JSON
   exists: Boolean
-  in: [String]
-  not_equals: String
-  not_in: [String]
+  in: [JSON]
+  not_equals: JSON
+  not_in: [JSON]
 }
 
 input Customer_phoneNumber_operator {
@@ -319,12 +329,12 @@ input Customer_updatedAt_operator {
 }
 
 input Customer_viewPost_operator {
-  all: [String]
-  equals: String
+  all: [JSON]
+  equals: JSON
   exists: Boolean
-  in: [String]
-  not_equals: String
-  not_in: [String]
+  in: [JSON]
+  not_equals: JSON
+  not_in: [JSON]
 }
 
 input Customer_where {
@@ -346,6 +356,8 @@ input Customer_where {
 }
 
 input Customer_where_and {
+  AND: [Customer_where_and]
+  OR: [Customer_where_or]
   _verified: Customer__verified_operator
   createdAt: Customer_createdAt_operator
   dateOfBirth: Customer_dateOfBirth_operator
@@ -362,6 +374,8 @@ input Customer_where_and {
 }
 
 input Customer_where_or {
+  AND: [Customer_where_and]
+  OR: [Customer_where_or]
   _verified: Customer__verified_operator
   createdAt: Customer_createdAt_operator
   dateOfBirth: Customer_dateOfBirth_operator
@@ -413,6 +427,7 @@ type CustomersDeleteDocAccess {
 
 type CustomersDocAccessFields {
   _verified: CustomersDocAccessFields__verified
+  createdAt: CustomersDocAccessFields_createdAt
   dateOfBirth: CustomersDocAccessFields_dateOfBirth
   email: CustomersDocAccessFields_email
   firstName: CustomersDocAccessFields_firstName
@@ -422,6 +437,7 @@ type CustomersDocAccessFields {
   likes: CustomersDocAccessFields_likes
   password: CustomersDocAccessFields_password
   phoneNumber: CustomersDocAccessFields_phoneNumber
+  updatedAt: CustomersDocAccessFields_updatedAt
   viewPost: CustomersDocAccessFields_viewPost
 }
 
@@ -445,6 +461,29 @@ type CustomersDocAccessFields__verified_Read {
 }
 
 type CustomersDocAccessFields__verified_Update {
+  permission: Boolean!
+}
+
+type CustomersDocAccessFields_createdAt {
+  create: CustomersDocAccessFields_createdAt_Create
+  delete: CustomersDocAccessFields_createdAt_Delete
+  read: CustomersDocAccessFields_createdAt_Read
+  update: CustomersDocAccessFields_createdAt_Update
+}
+
+type CustomersDocAccessFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type CustomersDocAccessFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type CustomersDocAccessFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type CustomersDocAccessFields_createdAt_Update {
   permission: Boolean!
 }
 
@@ -655,6 +694,29 @@ type CustomersDocAccessFields_phoneNumber_Update {
   permission: Boolean!
 }
 
+type CustomersDocAccessFields_updatedAt {
+  create: CustomersDocAccessFields_updatedAt_Create
+  delete: CustomersDocAccessFields_updatedAt_Delete
+  read: CustomersDocAccessFields_updatedAt_Read
+  update: CustomersDocAccessFields_updatedAt_Update
+}
+
+type CustomersDocAccessFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type CustomersDocAccessFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type CustomersDocAccessFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type CustomersDocAccessFields_updatedAt_Update {
+  permission: Boolean!
+}
+
 type CustomersDocAccessFields_viewPost {
   create: CustomersDocAccessFields_viewPost_Create
   delete: CustomersDocAccessFields_viewPost_Delete
@@ -680,6 +742,7 @@ type CustomersDocAccessFields_viewPost_Update {
 
 type CustomersFields {
   _verified: CustomersFields__verified
+  createdAt: CustomersFields_createdAt
   dateOfBirth: CustomersFields_dateOfBirth
   email: CustomersFields_email
   firstName: CustomersFields_firstName
@@ -689,6 +752,7 @@ type CustomersFields {
   likes: CustomersFields_likes
   password: CustomersFields_password
   phoneNumber: CustomersFields_phoneNumber
+  updatedAt: CustomersFields_updatedAt
   viewPost: CustomersFields_viewPost
 }
 
@@ -712,6 +776,29 @@ type CustomersFields__verified_Read {
 }
 
 type CustomersFields__verified_Update {
+  permission: Boolean!
+}
+
+type CustomersFields_createdAt {
+  create: CustomersFields_createdAt_Create
+  delete: CustomersFields_createdAt_Delete
+  read: CustomersFields_createdAt_Read
+  update: CustomersFields_createdAt_Update
+}
+
+type CustomersFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type CustomersFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type CustomersFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type CustomersFields_createdAt_Update {
   permission: Boolean!
 }
 
@@ -922,6 +1009,29 @@ type CustomersFields_phoneNumber_Update {
   permission: Boolean!
 }
 
+type CustomersFields_updatedAt {
+  create: CustomersFields_updatedAt_Create
+  delete: CustomersFields_updatedAt_Delete
+  read: CustomersFields_updatedAt_Read
+  update: CustomersFields_updatedAt_Update
+}
+
+type CustomersFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type CustomersFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type CustomersFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type CustomersFields_updatedAt_Update {
+  permission: Boolean!
+}
+
 type CustomersFields_viewPost {
   create: CustomersFields_viewPost_Create
   delete: CustomersFields_viewPost_Delete
@@ -997,14 +1107,14 @@ scalar JSONObject
 
 type Media {
   alt: String
-  createdAt: DateTime!
+  createdAt: DateTime
   filename: String
   filesize: Float
   height: Float
   id: String
   mimeType: String
   sizes: Media_Sizes
-  updatedAt: DateTime!
+  updatedAt: DateTime
   url: String
   width: Float
 }
@@ -1031,11 +1141,13 @@ type MediaDeleteDocAccess {
 
 type MediaDocAccessFields {
   alt: MediaDocAccessFields_alt
+  createdAt: MediaDocAccessFields_createdAt
   filename: MediaDocAccessFields_filename
   filesize: MediaDocAccessFields_filesize
   height: MediaDocAccessFields_height
   mimeType: MediaDocAccessFields_mimeType
   sizes: MediaDocAccessFields_sizes
+  updatedAt: MediaDocAccessFields_updatedAt
   url: MediaDocAccessFields_url
   width: MediaDocAccessFields_width
 }
@@ -1060,6 +1172,29 @@ type MediaDocAccessFields_alt_Read {
 }
 
 type MediaDocAccessFields_alt_Update {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_createdAt {
+  create: MediaDocAccessFields_createdAt_Create
+  delete: MediaDocAccessFields_createdAt_Delete
+  read: MediaDocAccessFields_createdAt_Read
+  update: MediaDocAccessFields_createdAt_Update
+}
+
+type MediaDocAccessFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_createdAt_Update {
   permission: Boolean!
 }
 
@@ -1870,6 +2005,29 @@ type MediaDocAccessFields_sizes_thumbnail_width_Update {
   permission: Boolean!
 }
 
+type MediaDocAccessFields_updatedAt {
+  create: MediaDocAccessFields_updatedAt_Create
+  delete: MediaDocAccessFields_updatedAt_Delete
+  read: MediaDocAccessFields_updatedAt_Read
+  update: MediaDocAccessFields_updatedAt_Update
+}
+
+type MediaDocAccessFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_updatedAt_Update {
+  permission: Boolean!
+}
+
 type MediaDocAccessFields_url {
   create: MediaDocAccessFields_url_Create
   delete: MediaDocAccessFields_url_Delete
@@ -1918,11 +2076,13 @@ type MediaDocAccessFields_width_Update {
 
 type MediaFields {
   alt: MediaFields_alt
+  createdAt: MediaFields_createdAt
   filename: MediaFields_filename
   filesize: MediaFields_filesize
   height: MediaFields_height
   mimeType: MediaFields_mimeType
   sizes: MediaFields_sizes
+  updatedAt: MediaFields_updatedAt
   url: MediaFields_url
   width: MediaFields_width
 }
@@ -1947,6 +2107,29 @@ type MediaFields_alt_Read {
 }
 
 type MediaFields_alt_Update {
+  permission: Boolean!
+}
+
+type MediaFields_createdAt {
+  create: MediaFields_createdAt_Create
+  delete: MediaFields_createdAt_Delete
+  read: MediaFields_createdAt_Read
+  update: MediaFields_createdAt_Update
+}
+
+type MediaFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type MediaFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type MediaFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type MediaFields_createdAt_Update {
   permission: Boolean!
 }
 
@@ -2757,6 +2940,29 @@ type MediaFields_sizes_thumbnail_width_Update {
   permission: Boolean!
 }
 
+type MediaFields_updatedAt {
+  create: MediaFields_updatedAt_Create
+  delete: MediaFields_updatedAt_Delete
+  read: MediaFields_updatedAt_Read
+  update: MediaFields_updatedAt_Update
+}
+
+type MediaFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type MediaFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type MediaFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type MediaFields_updatedAt_Update {
+  permission: Boolean!
+}
+
 type MediaFields_url {
   create: MediaFields_url_Create
   delete: MediaFields_url_Delete
@@ -2920,12 +3126,14 @@ input Media_height_operator {
 }
 
 input Media_id_operator {
-  all: [JSON]
-  equals: JSON
+  all: [String]
+  contains: String
+  equals: String
   exists: Boolean
-  in: [JSON]
-  not_equals: JSON
-  not_in: [JSON]
+  in: [String]
+  like: String
+  not_equals: String
+  not_in: [String]
 }
 
 input Media_mimeType_operator {
@@ -3253,6 +3461,8 @@ input Media_where {
 }
 
 input Media_where_and {
+  AND: [Media_where_and]
+  OR: [Media_where_or]
   alt: Media_alt_operator
   createdAt: Media_createdAt_operator
   filename: Media_filename_operator
@@ -3290,6 +3500,8 @@ input Media_where_and {
 }
 
 input Media_where_or {
+  AND: [Media_where_and]
+  OR: [Media_where_or]
   alt: Media_alt_operator
   createdAt: Media_createdAt_operator
   filename: Media_filename_operator
@@ -3340,14 +3552,15 @@ type Mutation {
   createCategory(data: mutationCategoryInput!, draft: Boolean): Category
   createCustomer(data: mutationCustomerInput!, draft: Boolean): Customer
   createMedia(data: mutationMediaInput!, draft: Boolean): Media
+  createPayloadPreference(data: mutationPayloadPreferenceInput!, draft: Boolean): PayloadPreference
   createPost(data: mutationPostInput!, draft: Boolean): Post
   createTag(data: mutationTagInput!, draft: Boolean): Tag
   createUser(data: mutationUserInput!, draft: Boolean): User
   deleteCategory(id: String!): Category
   deleteCustomer(id: String!): Customer
   deleteMedia(id: String!): Media
+  deletePayloadPreference(id: String!): PayloadPreference
   deletePost(id: String!): Post
-  deletePreference(key: String!): Preference
   deleteTag(id: String!): Tag
   deleteUser(id: String!): User
   forgotPasswordCustomer(disableEmail: Boolean, email: String!, expiration: Int): Boolean!
@@ -3365,26 +3578,464 @@ type Mutation {
   updateCategory(autosave: Boolean, data: mutationCategoryUpdateInput!, draft: Boolean, id: String!): Category
   updateCustomer(autosave: Boolean, data: mutationCustomerUpdateInput!, draft: Boolean, id: String!): Customer
   updateMedia(autosave: Boolean, data: mutationMediaUpdateInput!, draft: Boolean, id: String!): Media
+  updatePayloadPreference(autosave: Boolean, data: mutationPayloadPreferenceUpdateInput!, draft: Boolean, id: String!): PayloadPreference
   updatePost(autosave: Boolean, data: mutationPostUpdateInput!, draft: Boolean, id: String!): Post
-  updatePreference(key: String!, value: JSON): Preference
   updateTag(autosave: Boolean, data: mutationTagUpdateInput!, draft: Boolean, id: String!): Tag
   updateUser(autosave: Boolean, data: mutationUserUpdateInput!, draft: Boolean, id: String!): User
   verifyEmailCustomer(token: String): Boolean
   verifyEmailUser(token: String): Boolean
 }
 
+type PayloadPreference {
+  createdAt: DateTime
+  id: String
+  key: String
+  updatedAt: DateTime
+  user: PayloadPreference_User_Relationship!
+  value: JSON
+}
+
+input PayloadPreferenceUpdate_UserRelationshipInput {
+  relationTo: PayloadPreferenceUpdate_UserRelationshipInputRelationTo
+  value: JSON
+}
+
+enum PayloadPreferenceUpdate_UserRelationshipInputRelationTo {
+  customers
+  users
+}
+
+union PayloadPreference_User = Customer | User
+
+input PayloadPreference_UserRelationshipInput {
+  relationTo: PayloadPreference_UserRelationshipInputRelationTo
+  value: JSON
+}
+
+enum PayloadPreference_UserRelationshipInputRelationTo {
+  customers
+  users
+}
+
+enum PayloadPreference_User_RelationTo {
+  customers
+  users
+}
+
+type PayloadPreference_User_Relationship {
+  relationTo: PayloadPreference_User_RelationTo
+  value: PayloadPreference_User
+}
+
+input PayloadPreference_createdAt_operator {
+  equals: DateTime
+  exists: Boolean
+  greater_than: DateTime
+  greater_than_equal: DateTime
+  less_than: DateTime
+  less_than_equal: DateTime
+  like: DateTime
+  not_equals: DateTime
+}
+
+input PayloadPreference_id_operator {
+  all: [String]
+  contains: String
+  equals: String
+  exists: Boolean
+  in: [String]
+  like: String
+  not_equals: String
+  not_in: [String]
+}
+
+input PayloadPreference_key_operator {
+  all: [String]
+  contains: String
+  equals: String
+  exists: Boolean
+  in: [String]
+  like: String
+  not_equals: String
+  not_in: [String]
+}
+
+input PayloadPreference_updatedAt_operator {
+  equals: DateTime
+  exists: Boolean
+  greater_than: DateTime
+  greater_than_equal: DateTime
+  less_than: DateTime
+  less_than_equal: DateTime
+  like: DateTime
+  not_equals: DateTime
+}
+
+input PayloadPreference_user_Relation {
+  relationTo: PayloadPreference_user_Relation_RelationTo
+  value: JSON
+}
+
+enum PayloadPreference_user_Relation_RelationTo {
+  customers
+  users
+}
+
+input PayloadPreference_value_operator {
+  contains: JSON
+  equals: JSON
+  exists: Boolean
+  intersects: JSON
+  like: JSON
+  not_equals: JSON
+  within: JSON
+}
+
+input PayloadPreference_where {
+  AND: [PayloadPreference_where_and]
+  OR: [PayloadPreference_where_or]
+  createdAt: PayloadPreference_createdAt_operator
+  id: PayloadPreference_id_operator
+  key: PayloadPreference_key_operator
+  updatedAt: PayloadPreference_updatedAt_operator
+  user: PayloadPreference_user_Relation
+  value: PayloadPreference_value_operator
+}
+
+input PayloadPreference_where_and {
+  AND: [PayloadPreference_where_and]
+  OR: [PayloadPreference_where_or]
+  createdAt: PayloadPreference_createdAt_operator
+  id: PayloadPreference_id_operator
+  key: PayloadPreference_key_operator
+  updatedAt: PayloadPreference_updatedAt_operator
+  user: PayloadPreference_user_Relation
+  value: PayloadPreference_value_operator
+}
+
+input PayloadPreference_where_or {
+  AND: [PayloadPreference_where_and]
+  OR: [PayloadPreference_where_or]
+  createdAt: PayloadPreference_createdAt_operator
+  id: PayloadPreference_id_operator
+  key: PayloadPreference_key_operator
+  updatedAt: PayloadPreference_updatedAt_operator
+  user: PayloadPreference_user_Relation
+  value: PayloadPreference_value_operator
+}
+
+type PayloadPreferences {
+  docs: [PayloadPreference]
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  offset: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
+type PayloadPreferencesCreateAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type PayloadPreferencesCreateDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type PayloadPreferencesDeleteAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type PayloadPreferencesDeleteDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type PayloadPreferencesDocAccessFields {
+  createdAt: PayloadPreferencesDocAccessFields_createdAt
+  key: PayloadPreferencesDocAccessFields_key
+  updatedAt: PayloadPreferencesDocAccessFields_updatedAt
+  user: PayloadPreferencesDocAccessFields_user
+  value: PayloadPreferencesDocAccessFields_value
+}
+
+type PayloadPreferencesDocAccessFields_createdAt {
+  create: PayloadPreferencesDocAccessFields_createdAt_Create
+  delete: PayloadPreferencesDocAccessFields_createdAt_Delete
+  read: PayloadPreferencesDocAccessFields_createdAt_Read
+  update: PayloadPreferencesDocAccessFields_createdAt_Update
+}
+
+type PayloadPreferencesDocAccessFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type PayloadPreferencesDocAccessFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type PayloadPreferencesDocAccessFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type PayloadPreferencesDocAccessFields_createdAt_Update {
+  permission: Boolean!
+}
+
+type PayloadPreferencesDocAccessFields_key {
+  create: PayloadPreferencesDocAccessFields_key_Create
+  delete: PayloadPreferencesDocAccessFields_key_Delete
+  read: PayloadPreferencesDocAccessFields_key_Read
+  update: PayloadPreferencesDocAccessFields_key_Update
+}
+
+type PayloadPreferencesDocAccessFields_key_Create {
+  permission: Boolean!
+}
+
+type PayloadPreferencesDocAccessFields_key_Delete {
+  permission: Boolean!
+}
+
+type PayloadPreferencesDocAccessFields_key_Read {
+  permission: Boolean!
+}
+
+type PayloadPreferencesDocAccessFields_key_Update {
+  permission: Boolean!
+}
+
+type PayloadPreferencesDocAccessFields_updatedAt {
+  create: PayloadPreferencesDocAccessFields_updatedAt_Create
+  delete: PayloadPreferencesDocAccessFields_updatedAt_Delete
+  read: PayloadPreferencesDocAccessFields_updatedAt_Read
+  update: PayloadPreferencesDocAccessFields_updatedAt_Update
+}
+
+type PayloadPreferencesDocAccessFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type PayloadPreferencesDocAccessFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type PayloadPreferencesDocAccessFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type PayloadPreferencesDocAccessFields_updatedAt_Update {
+  permission: Boolean!
+}
+
+type PayloadPreferencesDocAccessFields_user {
+  create: PayloadPreferencesDocAccessFields_user_Create
+  delete: PayloadPreferencesDocAccessFields_user_Delete
+  read: PayloadPreferencesDocAccessFields_user_Read
+  update: PayloadPreferencesDocAccessFields_user_Update
+}
+
+type PayloadPreferencesDocAccessFields_user_Create {
+  permission: Boolean!
+}
+
+type PayloadPreferencesDocAccessFields_user_Delete {
+  permission: Boolean!
+}
+
+type PayloadPreferencesDocAccessFields_user_Read {
+  permission: Boolean!
+}
+
+type PayloadPreferencesDocAccessFields_user_Update {
+  permission: Boolean!
+}
+
+type PayloadPreferencesDocAccessFields_value {
+  create: PayloadPreferencesDocAccessFields_value_Create
+  delete: PayloadPreferencesDocAccessFields_value_Delete
+  read: PayloadPreferencesDocAccessFields_value_Read
+  update: PayloadPreferencesDocAccessFields_value_Update
+}
+
+type PayloadPreferencesDocAccessFields_value_Create {
+  permission: Boolean!
+}
+
+type PayloadPreferencesDocAccessFields_value_Delete {
+  permission: Boolean!
+}
+
+type PayloadPreferencesDocAccessFields_value_Read {
+  permission: Boolean!
+}
+
+type PayloadPreferencesDocAccessFields_value_Update {
+  permission: Boolean!
+}
+
+type PayloadPreferencesFields {
+  createdAt: PayloadPreferencesFields_createdAt
+  key: PayloadPreferencesFields_key
+  updatedAt: PayloadPreferencesFields_updatedAt
+  user: PayloadPreferencesFields_user
+  value: PayloadPreferencesFields_value
+}
+
+type PayloadPreferencesFields_createdAt {
+  create: PayloadPreferencesFields_createdAt_Create
+  delete: PayloadPreferencesFields_createdAt_Delete
+  read: PayloadPreferencesFields_createdAt_Read
+  update: PayloadPreferencesFields_createdAt_Update
+}
+
+type PayloadPreferencesFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type PayloadPreferencesFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type PayloadPreferencesFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type PayloadPreferencesFields_createdAt_Update {
+  permission: Boolean!
+}
+
+type PayloadPreferencesFields_key {
+  create: PayloadPreferencesFields_key_Create
+  delete: PayloadPreferencesFields_key_Delete
+  read: PayloadPreferencesFields_key_Read
+  update: PayloadPreferencesFields_key_Update
+}
+
+type PayloadPreferencesFields_key_Create {
+  permission: Boolean!
+}
+
+type PayloadPreferencesFields_key_Delete {
+  permission: Boolean!
+}
+
+type PayloadPreferencesFields_key_Read {
+  permission: Boolean!
+}
+
+type PayloadPreferencesFields_key_Update {
+  permission: Boolean!
+}
+
+type PayloadPreferencesFields_updatedAt {
+  create: PayloadPreferencesFields_updatedAt_Create
+  delete: PayloadPreferencesFields_updatedAt_Delete
+  read: PayloadPreferencesFields_updatedAt_Read
+  update: PayloadPreferencesFields_updatedAt_Update
+}
+
+type PayloadPreferencesFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type PayloadPreferencesFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type PayloadPreferencesFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type PayloadPreferencesFields_updatedAt_Update {
+  permission: Boolean!
+}
+
+type PayloadPreferencesFields_user {
+  create: PayloadPreferencesFields_user_Create
+  delete: PayloadPreferencesFields_user_Delete
+  read: PayloadPreferencesFields_user_Read
+  update: PayloadPreferencesFields_user_Update
+}
+
+type PayloadPreferencesFields_user_Create {
+  permission: Boolean!
+}
+
+type PayloadPreferencesFields_user_Delete {
+  permission: Boolean!
+}
+
+type PayloadPreferencesFields_user_Read {
+  permission: Boolean!
+}
+
+type PayloadPreferencesFields_user_Update {
+  permission: Boolean!
+}
+
+type PayloadPreferencesFields_value {
+  create: PayloadPreferencesFields_value_Create
+  delete: PayloadPreferencesFields_value_Delete
+  read: PayloadPreferencesFields_value_Read
+  update: PayloadPreferencesFields_value_Update
+}
+
+type PayloadPreferencesFields_value_Create {
+  permission: Boolean!
+}
+
+type PayloadPreferencesFields_value_Delete {
+  permission: Boolean!
+}
+
+type PayloadPreferencesFields_value_Read {
+  permission: Boolean!
+}
+
+type PayloadPreferencesFields_value_Update {
+  permission: Boolean!
+}
+
+type PayloadPreferencesReadAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type PayloadPreferencesReadDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type PayloadPreferencesUpdateAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type PayloadPreferencesUpdateDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
 type Post {
   author: User
   category: Category
   content(depth: Int): JSON
-  createdAt: DateTime!
+  createdAt: DateTime
   id: String
   meta: Post_Meta
   publishedDate: DateTime
   status: Post_status
   tags: [Tag!]
   title: String
-  updatedAt: DateTime!
+  updatedAt: DateTime
 }
 
 enum PostUpdate_status_MutationInput {
@@ -3407,6 +4058,17 @@ input Post_Meta_Image_alt_operator {
   like: String
   not_equals: String
   not_in: [String]
+}
+
+input Post_Meta_Image_createdAt_operator {
+  equals: DateTime
+  exists: Boolean
+  greater_than: DateTime
+  greater_than_equal: DateTime
+  less_than: DateTime
+  less_than_equal: DateTime
+  like: DateTime
+  not_equals: DateTime
 }
 
 input Post_Meta_Image_filename_operator {
@@ -3441,12 +4103,14 @@ input Post_Meta_Image_height_operator {
 }
 
 input Post_Meta_Image_id_operator {
-  all: [JSON]
-  equals: JSON
+  all: [String]
+  contains: String
+  equals: String
   exists: Boolean
-  in: [JSON]
-  not_equals: JSON
-  not_in: [JSON]
+  in: [String]
+  like: String
+  not_equals: String
+  not_in: [String]
 }
 
 input Post_Meta_Image_mimeType_operator {
@@ -3712,6 +4376,17 @@ input Post_Meta_Image_sizes__thumbnail__width_operator {
   not_equals: Float
 }
 
+input Post_Meta_Image_updatedAt_operator {
+  equals: DateTime
+  exists: Boolean
+  greater_than: DateTime
+  greater_than_equal: DateTime
+  less_than: DateTime
+  less_than_equal: DateTime
+  like: DateTime
+  not_equals: DateTime
+}
+
 input Post_Meta_Image_url_operator {
   all: [String]
   contains: String
@@ -3727,6 +4402,7 @@ input Post_Meta_Image_where {
   AND: [Post_Meta_Image_where_and]
   OR: [Post_Meta_Image_where_or]
   alt: Post_Meta_Image_alt_operator
+  createdAt: Post_Meta_Image_createdAt_operator
   filename: Post_Meta_Image_filename_operator
   filesize: Post_Meta_Image_filesize_operator
   height: Post_Meta_Image_height_operator
@@ -3756,12 +4432,16 @@ input Post_Meta_Image_where {
   sizes__thumbnail__mimeType: Post_Meta_Image_sizes__thumbnail__mimeType_operator
   sizes__thumbnail__url: Post_Meta_Image_sizes__thumbnail__url_operator
   sizes__thumbnail__width: Post_Meta_Image_sizes__thumbnail__width_operator
+  updatedAt: Post_Meta_Image_updatedAt_operator
   url: Post_Meta_Image_url_operator
   width: Post_Meta_Image_width_operator
 }
 
 input Post_Meta_Image_where_and {
+  AND: [Post_Meta_Image_where_and]
+  OR: [Post_Meta_Image_where_or]
   alt: Post_Meta_Image_alt_operator
+  createdAt: Post_Meta_Image_createdAt_operator
   filename: Post_Meta_Image_filename_operator
   filesize: Post_Meta_Image_filesize_operator
   height: Post_Meta_Image_height_operator
@@ -3791,12 +4471,16 @@ input Post_Meta_Image_where_and {
   sizes__thumbnail__mimeType: Post_Meta_Image_sizes__thumbnail__mimeType_operator
   sizes__thumbnail__url: Post_Meta_Image_sizes__thumbnail__url_operator
   sizes__thumbnail__width: Post_Meta_Image_sizes__thumbnail__width_operator
+  updatedAt: Post_Meta_Image_updatedAt_operator
   url: Post_Meta_Image_url_operator
   width: Post_Meta_Image_width_operator
 }
 
 input Post_Meta_Image_where_or {
+  AND: [Post_Meta_Image_where_and]
+  OR: [Post_Meta_Image_where_or]
   alt: Post_Meta_Image_alt_operator
+  createdAt: Post_Meta_Image_createdAt_operator
   filename: Post_Meta_Image_filename_operator
   filesize: Post_Meta_Image_filesize_operator
   height: Post_Meta_Image_height_operator
@@ -3826,6 +4510,7 @@ input Post_Meta_Image_where_or {
   sizes__thumbnail__mimeType: Post_Meta_Image_sizes__thumbnail__mimeType_operator
   sizes__thumbnail__url: Post_Meta_Image_sizes__thumbnail__url_operator
   sizes__thumbnail__width: Post_Meta_Image_sizes__thumbnail__width_operator
+  updatedAt: Post_Meta_Image_updatedAt_operator
   url: Post_Meta_Image_url_operator
   width: Post_Meta_Image_width_operator
 }
@@ -3841,21 +4526,21 @@ input Post_Meta_Image_width_operator {
 }
 
 input Post_author_operator {
-  all: [String]
-  equals: String
+  all: [JSON]
+  equals: JSON
   exists: Boolean
-  in: [String]
-  not_equals: String
-  not_in: [String]
+  in: [JSON]
+  not_equals: JSON
+  not_in: [JSON]
 }
 
 input Post_category_operator {
-  all: [String]
-  equals: String
+  all: [JSON]
+  equals: JSON
   exists: Boolean
-  in: [String]
-  not_equals: String
-  not_in: [String]
+  in: [JSON]
+  not_equals: JSON
+  not_in: [JSON]
 }
 
 input Post_content_operator {
@@ -3878,12 +4563,14 @@ input Post_createdAt_operator {
 }
 
 input Post_id_operator {
-  all: [JSON]
-  equals: JSON
+  all: [String]
+  contains: String
+  equals: String
   exists: Boolean
-  in: [JSON]
-  not_equals: JSON
-  not_in: [JSON]
+  in: [String]
+  like: String
+  not_equals: String
+  not_in: [String]
 }
 
 input Post_meta__description_operator {
@@ -3947,12 +4634,12 @@ input Post_status_operator {
 }
 
 input Post_tags_operator {
-  all: [String]
-  equals: String
+  all: [JSON]
+  equals: JSON
   exists: Boolean
-  in: [String]
-  not_equals: String
-  not_in: [String]
+  in: [JSON]
+  not_equals: JSON
+  not_in: [JSON]
 }
 
 input Post_title_operator {
@@ -3996,6 +4683,8 @@ input Post_where {
 }
 
 input Post_where_and {
+  AND: [Post_where_and]
+  OR: [Post_where_or]
   author: Post_author_operator
   category: Post_category_operator
   content: Post_content_operator
@@ -4012,6 +4701,8 @@ input Post_where_and {
 }
 
 input Post_where_or {
+  AND: [Post_where_and]
+  OR: [Post_where_or]
   author: Post_author_operator
   category: Post_category_operator
   content: Post_content_operator
@@ -4065,11 +4756,13 @@ type PostsDocAccessFields {
   author: PostsDocAccessFields_author
   category: PostsDocAccessFields_category
   content: PostsDocAccessFields_content
+  createdAt: PostsDocAccessFields_createdAt
   meta: PostsDocAccessFields_meta
   publishedDate: PostsDocAccessFields_publishedDate
   status: PostsDocAccessFields_status
   tags: PostsDocAccessFields_tags
   title: PostsDocAccessFields_title
+  updatedAt: PostsDocAccessFields_updatedAt
 }
 
 type PostsDocAccessFields_author {
@@ -4138,6 +4831,29 @@ type PostsDocAccessFields_content_Read {
 }
 
 type PostsDocAccessFields_content_Update {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_createdAt {
+  create: PostsDocAccessFields_createdAt_Create
+  delete: PostsDocAccessFields_createdAt_Delete
+  read: PostsDocAccessFields_createdAt_Read
+  update: PostsDocAccessFields_createdAt_Update
+}
+
+type PostsDocAccessFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_createdAt_Update {
   permission: Boolean!
 }
 
@@ -4380,15 +5096,40 @@ type PostsDocAccessFields_title_Update {
   permission: Boolean!
 }
 
+type PostsDocAccessFields_updatedAt {
+  create: PostsDocAccessFields_updatedAt_Create
+  delete: PostsDocAccessFields_updatedAt_Delete
+  read: PostsDocAccessFields_updatedAt_Read
+  update: PostsDocAccessFields_updatedAt_Update
+}
+
+type PostsDocAccessFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_updatedAt_Update {
+  permission: Boolean!
+}
+
 type PostsFields {
   author: PostsFields_author
   category: PostsFields_category
   content: PostsFields_content
+  createdAt: PostsFields_createdAt
   meta: PostsFields_meta
   publishedDate: PostsFields_publishedDate
   status: PostsFields_status
   tags: PostsFields_tags
   title: PostsFields_title
+  updatedAt: PostsFields_updatedAt
 }
 
 type PostsFields_author {
@@ -4457,6 +5198,29 @@ type PostsFields_content_Read {
 }
 
 type PostsFields_content_Update {
+  permission: Boolean!
+}
+
+type PostsFields_createdAt {
+  create: PostsFields_createdAt_Create
+  delete: PostsFields_createdAt_Delete
+  read: PostsFields_createdAt_Read
+  update: PostsFields_createdAt_Update
+}
+
+type PostsFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type PostsFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type PostsFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type PostsFields_createdAt_Update {
   permission: Boolean!
 }
 
@@ -4699,6 +5463,29 @@ type PostsFields_title_Update {
   permission: Boolean!
 }
 
+type PostsFields_updatedAt {
+  create: PostsFields_updatedAt_Create
+  delete: PostsFields_updatedAt_Delete
+  read: PostsFields_updatedAt_Read
+  update: PostsFields_updatedAt_Update
+}
+
+type PostsFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type PostsFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type PostsFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type PostsFields_updatedAt_Update {
+  permission: Boolean!
+}
+
 type PostsReadAccess {
   permission: Boolean!
   where: JSONObject
@@ -4719,13 +5506,6 @@ type PostsUpdateDocAccess {
   where: JSONObject
 }
 
-type Preference {
-  createdAt: DateTime!
-  key: String!
-  updatedAt: DateTime!
-  value: JSON
-}
-
 type Query {
   Access: Access
   Categories(draft: Boolean, limit: Int, page: Int, sort: String, where: Category_where): Categories
@@ -4733,9 +5513,10 @@ type Query {
   Customer(draft: Boolean, id: String!): Customer
   Customers(draft: Boolean, limit: Int, page: Int, sort: String, where: Customer_where): Customers
   Media(draft: Boolean, id: String!): Media
+  PayloadPreference(draft: Boolean, id: String!): PayloadPreference
+  PayloadPreferences(draft: Boolean, limit: Int, page: Int, sort: String, where: PayloadPreference_where): PayloadPreferences
   Post(draft: Boolean, id: String!): Post
   Posts(draft: Boolean, limit: Int, page: Int, sort: String, where: Post_where): Posts
-  Preference(key: String): Preference
   Tag(draft: Boolean, id: String!): Tag
   Tags(draft: Boolean, limit: Int, page: Int, sort: String, where: Tag_where): Tags
   User(draft: Boolean, id: String!): User
@@ -4744,6 +5525,7 @@ type Query {
   docAccessCategory(id: String!): categoriesDocAccess
   docAccessCustomer(id: String!): customersDocAccess
   docAccessMedia(id: String!): mediaDocAccess
+  docAccessPayloadPreference(id: String!): payload_preferencesDocAccess
   docAccessPost(id: String!): postsDocAccess
   docAccessTag(id: String!): tagsDocAccess
   docAccessUser(id: String!): usersDocAccess
@@ -4759,12 +5541,14 @@ type Tag {
 }
 
 input Tag_id_operator {
-  all: [JSON]
-  equals: JSON
+  all: [String]
+  contains: String
+  equals: String
   exists: Boolean
-  in: [JSON]
-  not_equals: JSON
-  not_in: [JSON]
+  in: [String]
+  like: String
+  not_equals: String
+  not_in: [String]
 }
 
 input Tag_name_operator {
@@ -4786,11 +5570,15 @@ input Tag_where {
 }
 
 input Tag_where_and {
+  AND: [Tag_where_and]
+  OR: [Tag_where_or]
   id: Tag_id_operator
   name: Tag_name_operator
 }
 
 input Tag_where_or {
+  AND: [Tag_where_and]
+  OR: [Tag_where_or]
   id: Tag_id_operator
   name: Tag_name_operator
 }
@@ -4904,8 +5692,9 @@ type TagsUpdateDocAccess {
 }
 
 type User {
-  createdAt: DateTime!
-  email: EmailAddress
+  createdAt: DateTime
+  email: EmailAddress!
+  hash: String
   id: String
   lockUntil: DateTime
   loginAttempts: Float
@@ -4913,7 +5702,8 @@ type User {
   password: String!
   resetPasswordExpiration: DateTime
   resetPasswordToken: String
-  updatedAt: DateTime!
+  salt: String
+  updatedAt: DateTime
 }
 
 input User_createdAt_operator {
@@ -4931,7 +5721,6 @@ input User_email_operator {
   all: [EmailAddress]
   contains: EmailAddress
   equals: EmailAddress
-  exists: Boolean
   in: [EmailAddress]
   like: EmailAddress
   not_equals: EmailAddress
@@ -4939,12 +5728,14 @@ input User_email_operator {
 }
 
 input User_id_operator {
-  all: [JSON]
-  equals: JSON
+  all: [String]
+  contains: String
+  equals: String
   exists: Boolean
-  in: [JSON]
-  not_equals: JSON
-  not_in: [JSON]
+  in: [String]
+  like: String
+  not_equals: String
+  not_in: [String]
 }
 
 input User_name_operator {
@@ -4980,6 +5771,8 @@ input User_where {
 }
 
 input User_where_and {
+  AND: [User_where_and]
+  OR: [User_where_or]
   createdAt: User_createdAt_operator
   email: User_email_operator
   id: User_id_operator
@@ -4988,6 +5781,8 @@ input User_where_and {
 }
 
 input User_where_or {
+  AND: [User_where_and]
+  OR: [User_where_or]
   createdAt: User_createdAt_operator
   email: User_email_operator
   id: User_id_operator
@@ -5030,9 +5825,34 @@ type UsersDeleteDocAccess {
 }
 
 type UsersDocAccessFields {
+  createdAt: UsersDocAccessFields_createdAt
   email: UsersDocAccessFields_email
   name: UsersDocAccessFields_name
   password: UsersDocAccessFields_password
+  updatedAt: UsersDocAccessFields_updatedAt
+}
+
+type UsersDocAccessFields_createdAt {
+  create: UsersDocAccessFields_createdAt_Create
+  delete: UsersDocAccessFields_createdAt_Delete
+  read: UsersDocAccessFields_createdAt_Read
+  update: UsersDocAccessFields_createdAt_Update
+}
+
+type UsersDocAccessFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_createdAt_Update {
+  permission: Boolean!
 }
 
 type UsersDocAccessFields_email {
@@ -5104,10 +5924,58 @@ type UsersDocAccessFields_password_Update {
   permission: Boolean!
 }
 
+type UsersDocAccessFields_updatedAt {
+  create: UsersDocAccessFields_updatedAt_Create
+  delete: UsersDocAccessFields_updatedAt_Delete
+  read: UsersDocAccessFields_updatedAt_Read
+  update: UsersDocAccessFields_updatedAt_Update
+}
+
+type UsersDocAccessFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_updatedAt_Update {
+  permission: Boolean!
+}
+
 type UsersFields {
+  createdAt: UsersFields_createdAt
   email: UsersFields_email
   name: UsersFields_name
   password: UsersFields_password
+  updatedAt: UsersFields_updatedAt
+}
+
+type UsersFields_createdAt {
+  create: UsersFields_createdAt_Create
+  delete: UsersFields_createdAt_Delete
+  read: UsersFields_createdAt_Read
+  update: UsersFields_createdAt_Update
+}
+
+type UsersFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type UsersFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type UsersFields_createdAt_Update {
+  permission: Boolean!
 }
 
 type UsersFields_email {
@@ -5176,6 +6044,29 @@ type UsersFields_password_Read {
 }
 
 type UsersFields_password_Update {
+  permission: Boolean!
+}
+
+type UsersFields_updatedAt {
+  create: UsersFields_updatedAt_Create
+  delete: UsersFields_updatedAt_Delete
+  read: UsersFields_updatedAt_Read
+  update: UsersFields_updatedAt_Update
+}
+
+type UsersFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type UsersFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type UsersFields_updatedAt_Update {
   permission: Boolean!
 }
 
@@ -5313,10 +6204,12 @@ input mutationCategoryUpdateInput {
 input mutationCustomerInput {
   _verificationToken: String
   _verified: Boolean
+  createdAt: String
   dateOfBirth: String
-  email: String
+  email: String!
   firstName: String!
   gender: [Customer_gender_MutationInput]
+  hash: String
   lastName: String!
   likeCount: Float
   likes: [String]
@@ -5326,16 +6219,20 @@ input mutationCustomerInput {
   phoneNumber: String
   resetPasswordExpiration: String
   resetPasswordToken: String
+  salt: String
+  updatedAt: String
   viewPost: [String]
 }
 
 input mutationCustomerUpdateInput {
   _verificationToken: String
   _verified: Boolean
+  createdAt: String
   dateOfBirth: String
   email: String
   firstName: String
   gender: [CustomerUpdate_gender_MutationInput]
+  hash: String
   lastName: String
   likeCount: Float
   likes: [String]
@@ -5345,27 +6242,33 @@ input mutationCustomerUpdateInput {
   phoneNumber: String
   resetPasswordExpiration: String
   resetPasswordToken: String
+  salt: String
+  updatedAt: String
   viewPost: [String]
 }
 
 input mutationMediaInput {
   alt: String
+  createdAt: String
   filename: String
   filesize: Float
   height: Float
   mimeType: String
   sizes: mutationMedia_SizesInput
+  updatedAt: String
   url: String
   width: Float
 }
 
 input mutationMediaUpdateInput {
   alt: String
+  createdAt: String
   filename: String
   filesize: Float
   height: Float
   mimeType: String
   sizes: mutationMediaUpdate_SizesInput
+  updatedAt: String
   url: String
   width: Float
 }
@@ -5456,26 +6359,46 @@ input mutationMedia_Sizes_ThumbnailInput {
   width: Float
 }
 
+input mutationPayloadPreferenceInput {
+  createdAt: String
+  key: String
+  updatedAt: String
+  user: PayloadPreference_UserRelationshipInput
+  value: JSON
+}
+
+input mutationPayloadPreferenceUpdateInput {
+  createdAt: String
+  key: String
+  updatedAt: String
+  user: PayloadPreferenceUpdate_UserRelationshipInput
+  value: JSON
+}
+
 input mutationPostInput {
   author: String
   category: String
   content: JSON
+  createdAt: String
   meta: mutationPost_MetaInput
   publishedDate: String
   status: Post_status_MutationInput
   tags: [String]
   title: String
+  updatedAt: String
 }
 
 input mutationPostUpdateInput {
   author: String
   category: String
   content: JSON
+  createdAt: String
   meta: mutationPostUpdate_MetaInput
   publishedDate: String
   status: PostUpdate_status_MutationInput
   tags: [String]
   title: String
+  updatedAt: String
 }
 
 input mutationPostUpdate_MetaInput {
@@ -5499,23 +6422,47 @@ input mutationTagUpdateInput {
 }
 
 input mutationUserInput {
-  email: String
+  createdAt: String
+  email: String!
+  hash: String
   lockUntil: String
   loginAttempts: Float
   name: String
   password: String!
   resetPasswordExpiration: String
   resetPasswordToken: String
+  salt: String
+  updatedAt: String
 }
 
 input mutationUserUpdateInput {
+  createdAt: String
   email: String
+  hash: String
   lockUntil: String
   loginAttempts: Float
   name: String
   password: String
   resetPasswordExpiration: String
   resetPasswordToken: String
+  salt: String
+  updatedAt: String
+}
+
+type payload_preferencesAccess {
+  create: PayloadPreferencesCreateAccess
+  delete: PayloadPreferencesDeleteAccess
+  fields: PayloadPreferencesFields
+  read: PayloadPreferencesReadAccess
+  update: PayloadPreferencesUpdateAccess
+}
+
+type payload_preferencesDocAccess {
+  create: PayloadPreferencesCreateDocAccess
+  delete: PayloadPreferencesDeleteDocAccess
+  fields: PayloadPreferencesDocAccessFields
+  read: PayloadPreferencesReadDocAccess
+  update: PayloadPreferencesUpdateDocAccess
 }
 
 type postsAccess {

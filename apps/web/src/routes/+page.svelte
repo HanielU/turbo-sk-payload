@@ -1,3 +1,17 @@
+<script lang="ts">
+  import { trpc } from "$lib/trpc";
+
+  let msg = "";
+
+  async function handleClick() {
+    msg = await trpc().greeting.query();
+
+    setTimeout(() => {
+      msg = "";
+    }, 2000);
+  }
+</script>
+
 <!-- Unocss intellisense doesn't work when usng icons unless you download the icon pack -->
 <!-- https://github.com/unocss/unocss/tree/main/packages/preset-icons -->
 
@@ -35,8 +49,13 @@
     </div>
 
     <div op-30 fw-300 max-w-40ch m="b-2 t--14" text-lg>
-      The fastest way to build svelte apps with the Instant on-demand Atomic CSS engine
+      The fastest way to build svelte apps with the Instant on-demand Atomic CSS
+      engine
     </div>
+
+    <button class="bg-indigo-6 p-2 rd-full" on:click={handleClick}>
+      From Backend: {msg}
+    </button>
   </div>
 </div>
 

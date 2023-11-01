@@ -1,9 +1,9 @@
 import extractorSvelte from "@unocss/extractor-svelte";
 import {
   defineConfig,
-  presetAttributify,
   presetIcons,
   presetUno,
+  presetAttributify,
   transformerDirectives,
   transformerVariantGroup,
 } from "unocss";
@@ -36,7 +36,7 @@ export default defineConfig({
   presets: [
     myPreset,
     presetUno(),
-    presetIcons({ scale: 1.2 }),
+    presetIcons({ scale: 1.2, cdn: "https://esm.sh/" }),
     presetAttributify(),
   ],
   transformers: [transformerDirectives(), transformerVariantGroup()],

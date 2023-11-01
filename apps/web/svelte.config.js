@@ -13,10 +13,6 @@ const config = {
       $houdini: "./$houdini",
     },
   },
-
-  vitePlugin: {
-    inspector: true,
-  },
 };
 
 export default config;
